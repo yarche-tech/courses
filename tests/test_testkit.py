@@ -1,9 +1,10 @@
+import socket
 import tomllib
 from pathlib import Path
 
 import pytest
 
-from testkit import load_task, task_path
+from testkit import load_task, require_service, service_available, task_path
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -54,3 +55,34 @@ def test_missing_solution_names_the_path(tmp_path):
 def test_pytest_uses_importlib_mode():
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     assert "--import-mode=importlib" in config["tool"]["pytest"]["ini_options"]["addopts"]
+
+
+def free_port() -> int:
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def test_service_available_true_for_listening_port():
+    with socket.socket() as server:
+        server.bind(("127.0.0.1", 0))
+        server.listen()
+        assert service_available("127.0.0.1", server.getsockname()[1])
+
+
+def test_service_available_false_for_closed_port():
+    assert not service_available("127.0.0.1", free_port())
+
+
+def test_require_service_skips_with_hint():
+    url = f"postgresql://u:p@127.0.0.1:{free_port()}/db"
+    with pytest.raises(pytest.skip.Exception, match="docker compose up -d"):
+        require_service(url, "Postgres")
+
+
+def test_require_service_returns_url_when_up():
+    with socket.socket() as server:
+        server.bind(("127.0.0.1", 0))
+        server.listen()
+        url = f"redis://127.0.0.1:{server.getsockname()[1]}/0"
+        assert require_service(url, "Redis") == url

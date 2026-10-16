@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import importlib.util
+import socket
 from pathlib import Path
 from types import ModuleType
+from urllib.parse import urlparse
+
+import pytest
 
 
 def task_path(exercise_dir: Path, root: Path, use_solutions: bool) -> Path:
@@ -27,3 +31,21 @@ def load_task(exercise_dir: Path, root: Path, use_solutions: bool) -> ModuleType
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def service_available(host: str, port: int, timeout: float = 0.5) -> bool:
+    """Открыт ли TCP-порт."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except OSError:
+        return False
+
+
+def require_service(url: str, name: str) -> str:
+    """Вернуть url, если сервис отвечает, иначе пропустить тест с подсказкой."""
+    parsed = urlparse(url)
+    host = parsed.hostname or "localhost"
+    if parsed.port is None or not service_available(host, parsed.port):
+        pytest.skip(f"{name} недоступен ({host}:{parsed.port}). Запусти: docker compose up -d")
+    return url
