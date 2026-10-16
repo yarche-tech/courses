@@ -65,6 +65,7 @@ nav:
   - Главная: index.md
   - Python Advanced:
       - python-advanced/index.md
+      - Декораторы: python-advanced/01-decorators.md
   - CS Fundamentals:
       - cs-fundamentals/index.md
   - Backend:
