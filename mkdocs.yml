@@ -1,0 +1,82 @@
+site_name: Курсы
+site_description: 8 направлений — от Python Advanced до Applied AI
+site_url: https://yarche-tech.github.io/courses/
+repo_url: https://github.com/yarche-tech/courses
+repo_name: yarche-tech/courses
+edit_uri: edit/main/docs/
+
+exclude_docs: |
+  superpowers/
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.footer
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+
+plugins:
+  - search:
+      lang: [ru, en]
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Главная: index.md
+  - Python Advanced:
+      - python-advanced/index.md
+  - CS Fundamentals:
+      - cs-fundamentals/index.md
+  - Backend:
+      - backend/index.md
+  - Architecture:
+      - architecture/index.md
+  - ML:
+      - ml/index.md
+  - CV:
+      - cv/index.md
+  - LLM:
+      - llm/index.md
+  - Applied AI:
+      - applied-ai/index.md
+  - Источники: credits.md

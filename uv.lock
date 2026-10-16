@@ -178,6 +178,7 @@ dev = [
     { name = "pyyaml" },
 ]
 docs = [
+    { name = "mkdocs" },
     { name = "mkdocs-material" },
 ]
 
@@ -188,7 +189,10 @@ dev = [
     { name = "pytest", specifier = ">=8.3" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
-docs = [{ name = "mkdocs-material", specifier = ">=9.6" }]
+docs = [
+    { name = "mkdocs", specifier = ">=1.6,<2" },
+    { name = "mkdocs-material", specifier = ">=9.6" },
+]
 
 [[package]]
 name = "ghp-import"
